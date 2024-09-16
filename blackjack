@@ -1,0 +1,107 @@
+import random
+import art
+
+def play_start():
+
+    game_start = True
+    while game_start:
+
+        restart = True
+        while restart:
+            loop_to_start = True
+
+            while loop_to_start:
+                print(art.logo)
+                print("Welcome to the BlackJack game by Arturo!")
+                start = input("Ready to play BlackJack? Type 'y' to play\n").lower()
+
+                if start == "y":
+                    loop_to_start = False
+                else:
+                    print("\n" * 100)
+
+            # Step 1.2: starting cards
+            cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+            player_hand = []
+            computer_hand_first_draw = random.choice(cards)
+
+            # Step 1.2.1 Player starting hand
+            player_hand += random.choice(cards), random.choice(cards)
+            sum_player_hand = player_hand[0] + player_hand[1]
+            print(f"Your cards: {player_hand}. Result: {sum_player_hand}.")
+            if sum_player_hand == 22:
+                sum_player_hand = 12
+                player_hand[1] = 1
+            if sum_player_hand == 21:
+                print("BlackJack! You won!")
+                restart = False
+                break
+
+            # Step 1.2.2: Computer starting hand
+            computer_hand = []
+            computer_hand.append(computer_hand_first_draw)
+            print(f"Computer's first card: {computer_hand}.")
+
+            # Step 2: Player's hand
+            another_card_loop = input("Do you want another card? Type 'y' or 'n'.\n").lower()
+
+            while another_card_loop == 'y':
+                sum_player_hand = sum(player_hand)
+                another_card = random.choice(cards)
+                if another_card == 11:
+                    choose_as = input("You drew an Ace. Do you want to count it as 11 or 1? ")
+                    if choose_as == "1":
+                        another_card = 1
+                player_hand.append(another_card)
+                sum_player_hand += another_card
+
+                if sum_player_hand > 21:
+                    print(f"Your cards: {player_hand}. Result: {sum_player_hand}.")
+                    print("Bust! You lost.")
+                    another_card_loop = 'n'
+                    restart = False
+                    break
+
+                elif sum_player_hand == 21:
+                    print(f"Your cards: {player_hand}. Result: {sum_player_hand}.")
+                    print("BlackJack, you won!")
+                    restart = False
+                    break
+
+                else:
+                    print(f"Your cards: {player_hand}. Result: {sum_player_hand}.")
+                    another_card_loop = input("Do you want another card? Type 'y' or 'n'.\n").lower()
+
+            if not restart:
+                break
+
+            # Step 3: Computer's hand
+            draw_computer = True
+            sum_computer_hand = sum(computer_hand)
+            while draw_computer:
+                another_card = random.choice(cards)
+                tempo_sum = sum_computer_hand + another_card
+                if tempo_sum > 21:
+                    draw_computer = False
+                elif tempo_sum == 21:
+                    computer_hand.append(another_card)
+                    sum_computer_hand += another_card
+                    draw_computer = False
+                elif tempo_sum < 21:
+                    computer_hand.append(another_card)
+                    sum_computer_hand += another_card
+
+            # Step 4:
+            print(f"You have {sum_player_hand}.")
+            print(f"The computer has {sum_computer_hand}.")
+
+            if sum_player_hand > sum_computer_hand:
+                print("You won!")
+            elif sum_player_hand == sum_computer_hand:
+                print("It's a draw!")
+            else:
+                print("You lost!")
+
+            restart = False
+
+play_start()
